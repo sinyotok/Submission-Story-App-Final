@@ -1,4 +1,4 @@
-package com.aryanto.storyappfinal.core.model
+package com.aryanto.storyappfinal.core.data.model
 
 data class LoginResult(
     val userId: String,

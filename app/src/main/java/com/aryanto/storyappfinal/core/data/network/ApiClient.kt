@@ -1,4 +1,4 @@
-package com.aryanto.storyappfinal.core.network
+package com.aryanto.storyappfinal.core.data.network
 
 import com.aryanto.storyappfinal.BuildConfig
 import okhttp3.Interceptor
