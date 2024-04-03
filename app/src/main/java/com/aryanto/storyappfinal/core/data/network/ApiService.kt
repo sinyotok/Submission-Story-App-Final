@@ -2,9 +2,12 @@ package com.aryanto.storyappfinal.core.data.network
 
 import com.aryanto.storyappfinal.core.data.response.LoginResponse
 import com.aryanto.storyappfinal.core.data.response.RegisterResponse
+import com.aryanto.storyappfinal.core.data.response.StoryResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     @FormUrlEncoded
@@ -21,5 +24,12 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): RegisterResponse
+
+    @GET("stories")
+    suspend fun getStories(
+        @Query("page") page: Int?,
+        @Query("size") size: Int?,
+        @Query("location") location: Int?,
+    ): StoryResponse
 
 }
