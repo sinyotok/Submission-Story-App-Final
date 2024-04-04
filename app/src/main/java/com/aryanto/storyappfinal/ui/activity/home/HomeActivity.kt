@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aryanto.storyappfinal.R
 import com.aryanto.storyappfinal.databinding.ActivityHomeBinding
 import com.aryanto.storyappfinal.ui.activity.auth.login.LoginActivity
+import com.aryanto.storyappfinal.ui.activity.upload.UploadActivity
 import com.aryanto.storyappfinal.utils.ClientState
 import com.aryanto.storyappfinal.utils.TokenManager
 import kotlinx.coroutines.launch
@@ -64,7 +65,6 @@ class HomeActivity : AppCompatActivity() {
                     is ClientState.SUCCESS -> {
                         homeProgressBar.visibility = View.GONE
                         resources.data?.let {
-//                            handleSuccess(it)
                             homeAdapter.updateItem(it)
                         }
                     }
@@ -89,6 +89,13 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+
+            R.id.action_upload -> {
+                val intent = Intent(this, UploadActivity::class.java)
+                startActivity(intent)
+
+                true
+            }
 
             R.id.action_logout -> {
                 lifecycleScope.launch {
