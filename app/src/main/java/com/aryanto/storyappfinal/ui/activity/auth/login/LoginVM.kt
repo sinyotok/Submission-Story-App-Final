@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aryanto.storyappfinal.core.data.model.LoginResult
-import com.aryanto.storyappfinal.core.data.network.ApiService
 import com.aryanto.storyappfinal.core.data.response.LoginResponse
+import com.aryanto.storyappfinal.core.repo.AuthRepository
 import com.aryanto.storyappfinal.utils.ClientState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class LoginVM(
-    private val apiService: ApiService
+    private val authRepo: AuthRepository
 ) : ViewModel() {
 
     private val _login = MutableLiveData<ClientState<LoginResult>>()
@@ -24,7 +24,7 @@ class LoginVM(
         viewModelScope.launch {
             try {
                 _login.postValue(ClientState.LOADING())
-                val response = apiService.login(email, password)
+                val response = authRepo.login(email, password)
 
                 if (response.error) {
                     _login.postValue(ClientState.ERROR(response.message))

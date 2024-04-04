@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aryanto.storyappfinal.core.data.network.ApiService
 import com.aryanto.storyappfinal.core.data.response.RegisterResponse
+import com.aryanto.storyappfinal.core.repo.AuthRepository
 import com.aryanto.storyappfinal.utils.ClientState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class RegisterVM(
-    private val apiService: ApiService
+    private val authRepo: AuthRepository
 ) : ViewModel() {
     private val _register = MutableLiveData<ClientState<RegisterResponse>>()
     val register: LiveData<ClientState<RegisterResponse>> = _register
@@ -22,7 +22,7 @@ class RegisterVM(
         viewModelScope.launch {
             try {
                 _register.postValue(ClientState.LOADING())
-                val response = apiService.register(name, email, pass)
+                val response = authRepo.register(name, email, pass)
 
                 if (response.error) {
                     _register.postValue(ClientState.ERROR(response.message))

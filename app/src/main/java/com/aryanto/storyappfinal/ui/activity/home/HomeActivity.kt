@@ -44,11 +44,6 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        homeVM.getStories()
-//    }
-
     private fun setAdapter() {
         binding.apply {
             pagingAdapter = PagingAdapter()
@@ -68,38 +63,6 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
-
-//    private fun setView() {
-//        binding.apply {
-//            homeVM.stories.observe(this@HomeActivity) { resources ->
-//                when (resources) {
-//                    is ClientState.SUCCESS -> {
-//                        homeProgressBar.visibility = View.GONE
-//                        resources.data?.let {
-////                            pagingAdapter.submitData(it)
-//                            handleSuccess(it)
-//                        }
-//
-//                    }
-//
-//                    is ClientState.ERROR -> {
-//                        homeProgressBar.visibility = View.GONE
-//                        showToast("${resources.message}")
-//                    }
-//
-//                    is ClientState.LOADING -> {
-//                        homeProgressBar.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//    private fun handleSuccess(story: List<Story>) {
-//        lifecycleScope.launch {
-//            pagingAdapter.submitData(PagingData.from(story))
-//        }
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_options, menu)
@@ -131,9 +94,5 @@ class HomeActivity : AppCompatActivity() {
 
         }
     }
-
-//    private fun showToast(message: String) {
-//        Toast.makeText(this@HomeActivity, message, Toast.LENGTH_LONG).show()
-//    }
 
 }

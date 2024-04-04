@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aryanto.storyappfinal.core.data.model.Story
-import com.aryanto.storyappfinal.core.data.network.ApiService
 import com.aryanto.storyappfinal.core.data.response.DetailResponse
+import com.aryanto.storyappfinal.core.repo.AppRepository
 import com.aryanto.storyappfinal.utils.ClientState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class DetailVM(
-    private val apiService: ApiService
+    private val appRepo: AppRepository
 ) : ViewModel() {
     private val _detail = MutableLiveData<ClientState<Story>>()
     val detail: LiveData<ClientState<Story>> = _detail
@@ -23,7 +23,7 @@ class DetailVM(
         viewModelScope.launch {
             try {
                 _detail.postValue(ClientState.LOADING())
-                val response = apiService.getDetail(storyId)
+                val response = appRepo.detail(storyId)
 
                 if (response.error) {
                     _detail.postValue(ClientState.ERROR(response.message))
