@@ -16,38 +16,41 @@ class TokenManager private constructor(context: Context) {
 
     companion object {
         const val PREF_NAME = "token_prefs"
-        val TOKEN = stringPreferencesKey("token")
-        val SESSION = booleanPreferencesKey("session")
+        const val TOKEN = "token"
+        const val SESSION = "session"
 
         @Volatile
         private var instance: TokenManager? = null
 
-        fun getInstance(context: Context): TokenManager {
-            return instance ?: synchronized(this) {
-                instance ?: TokenManager(context).also { instance = it }
-            }
+        fun getInstance(context: Context): TokenManager = instance ?: synchronized(this) {
+            instance ?: TokenManager(context).also { instance = it }
         }
 
     }
 
-    suspend fun saveTokenAndSession(token: String, session: Boolean) {
-        dataStore.edit { prefs ->
-            prefs[TOKEN] = token
-            prefs[SESSION] = session
-        }
-    }
-
-    suspend fun getTokenAndSession(): Pair<String?, Boolean?> {
+    suspend fun getToken(): String? {
+        val token = stringPreferencesKey(TOKEN)
         val prefs = dataStore.data.first()
-        val token = prefs[TOKEN]
-        val session = prefs[SESSION]
-        return Pair(token, session)
+        return prefs[token]
+    }
+
+    suspend fun getSession(): Boolean {
+        val session = booleanPreferencesKey(SESSION)
+        val prefs = dataStore.data.first()
+        return prefs[session] ?: false
+    }
+
+    suspend fun saveTokenSession(token: String, isLoggedIn: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[stringPreferencesKey(TOKEN)] = token
+            prefs[booleanPreferencesKey(SESSION)] = isLoggedIn
+        }
     }
 
     suspend fun clearTokenAndSession() {
         dataStore.edit { prefs ->
-            prefs.remove(TOKEN)
-            prefs.remove(SESSION)
+            prefs.remove(stringPreferencesKey(TOKEN))
+            prefs.remove(booleanPreferencesKey(SESSION))
         }
     }
 

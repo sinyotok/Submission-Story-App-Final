@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aryanto.storyappfinal.core.data.model.Story
+import com.aryanto.storyappfinal.core.data.network.ApiClient
 import com.aryanto.storyappfinal.core.data.network.ApiService
 import com.aryanto.storyappfinal.core.data.response.StoryResponse
 import com.aryanto.storyappfinal.utils.ClientState
@@ -15,7 +16,8 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class HomeVM(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val tManager: TokenManager
 ) : ViewModel() {
     private val _stories = MutableLiveData<ClientState<List<Story>>>()
     val stories: LiveData<ClientState<List<Story>>> = _stories
@@ -24,6 +26,10 @@ class HomeVM(
         viewModelScope.launch {
             try {
                 _stories.postValue(ClientState.LOADING())
+
+                val auth = tManager.getToken() ?: ""
+                ApiClient.setAuthToken(auth)
+
                 val response = apiService.getStories(page = 1, size = 50, location = null)
 
                 if (response.error) {

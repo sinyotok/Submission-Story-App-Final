@@ -13,8 +13,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aryanto.storyappfinal.R
-import com.aryanto.storyappfinal.core.data.model.Story
-import com.aryanto.storyappfinal.core.data.network.ApiClient
 import com.aryanto.storyappfinal.databinding.ActivityHomeBinding
 import com.aryanto.storyappfinal.ui.activity.auth.login.LoginActivity
 import com.aryanto.storyappfinal.utils.ClientState
@@ -44,8 +42,11 @@ class HomeActivity : AppCompatActivity() {
 
         setView()
 
-        homeVM.getStories()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        homeVM.getStories()
     }
 
     private fun setAdapter() {
@@ -63,8 +64,8 @@ class HomeActivity : AppCompatActivity() {
                     is ClientState.SUCCESS -> {
                         homeProgressBar.visibility = View.GONE
                         resources.data?.let {
-                            handleSuccess(it)
-//                            homeAdapter.updateItem(it)
+//                            handleSuccess(it)
+                            homeAdapter.updateItem(it)
                         }
                     }
 
@@ -78,15 +79,6 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
-    }
-
-    private fun handleSuccess(story: List<Story>) {
-        lifecycleScope.launch {
-            val tokenManager = TokenManager.getInstance(this@HomeActivity)
-            val auth = tokenManager.getTokenAndSession()
-            ApiClient.setAuthToken(auth)
-            homeAdapter.updateItem(story)
         }
     }
 

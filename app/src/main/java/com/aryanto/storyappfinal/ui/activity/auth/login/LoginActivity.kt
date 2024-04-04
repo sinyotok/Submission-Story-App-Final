@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
@@ -14,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.aryanto.storyappfinal.R
 import com.aryanto.storyappfinal.core.data.model.LoginResult
+import com.aryanto.storyappfinal.core.data.network.ApiClient
 import com.aryanto.storyappfinal.databinding.ActivityLoginBinding
 import com.aryanto.storyappfinal.ui.activity.auth.register.RegisterActivity
 import com.aryanto.storyappfinal.ui.activity.home.HomeActivity
@@ -37,11 +39,37 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        applyAnimation()
+
+        setView()
         setPageRegister()
         setBtnLogin()
-        setView()
+        checkSession()
+        applyAnimation()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkSession()
+    }
+
+    private fun checkSession() {
+        lifecycleScope.launch {
+            val session = TokenManager.getInstance(this@LoginActivity).getSession()
+            if (session) {
+                val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+                return@launch
+            }
+        }
+    }
+
+    private suspend fun setTokenSession(token: String, isLoggedIn: Boolean) {
+        TokenManager.getInstance(this@LoginActivity).saveTokenSession(token, isLoggedIn)
+        Log.d("SAF-LA sTknSsn", "Token: $token")
+        ApiClient.setAuthToken(token)
     }
 
     private fun setView() {
@@ -67,22 +95,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleLoginSuccess(loginResult: LoginResult) {
+        val auth = loginResult.token
+
         lifecycleScope.launch {
-            val auth = loginResult.token
-            val tokenManager = TokenManager.getInstance(this@LoginActivity)
-
-            tokenManager.saveTokenAndSession(auth, true)
-
-            val (token) = tokenManager.getTokenAndSession()
-            if (token != null){
-                val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                startActivity(intent)
-                finish()
-            } else {
-                showToast("Login session has expired!")
-            }
-
+            setTokenSession(auth, true)
+            Log.d("SAF-LA GT", "Token: $auth")
+            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
         }
+
     }
 
     private fun handleError(errorMSG: String?) {

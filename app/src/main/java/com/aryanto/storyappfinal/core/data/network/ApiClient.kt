@@ -38,7 +38,7 @@ object ApiClient {
 
     }
 
-    fun setAuthToken(token: Pair<String?, Boolean?>) {
+    fun setAuthToken(token: String) {
         authToken = "Bearer $token"
     }
 }
