@@ -69,6 +69,10 @@ dependencies {
     implementation(libs.glide)
     ksp(libs.compiler)
 
+    //paging 3
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.room.paging)
+
     //room
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)

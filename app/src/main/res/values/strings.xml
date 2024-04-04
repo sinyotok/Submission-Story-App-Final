@@ -33,5 +33,7 @@
     <string name="logo_image_item">Logo image item</string>
     <string name="logo_image_detail">Logo image detail</string>
     <string name="logo_image_preview_upload">Logo image preview upload</string>
+    <string name="time_out">Time out</string>
+    <string name="retry">Retry</string>
 
 </resources>
