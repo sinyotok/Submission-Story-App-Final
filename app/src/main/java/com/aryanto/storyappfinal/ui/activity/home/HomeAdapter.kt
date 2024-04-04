@@ -41,7 +41,7 @@ class HomeAdapter(
                             Pair(descriptionItem, "shared_desc"),
                         )
 
-                    root.context.startActivity(intent)
+                    root.context.startActivity(intent, optionCompact.toBundle())
 
                 }
             }
