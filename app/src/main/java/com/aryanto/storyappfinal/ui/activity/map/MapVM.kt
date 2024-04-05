@@ -19,7 +19,7 @@ class MapVM(
     private val _map = MutableLiveData<ClientState<List<Story>>>()
     val map: LiveData<ClientState<List<Story>>> = _map
 
-    fun performLogin() {
+    fun mapStory() {
         viewModelScope.launch {
             try {
                 _map.postValue(ClientState.LOADING())

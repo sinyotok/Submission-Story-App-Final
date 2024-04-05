@@ -3,15 +3,19 @@ package com.aryanto.storyappfinal.ui.activity.map
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aryanto.storyappfinal.R
+import com.aryanto.storyappfinal.core.data.model.Story
 import com.aryanto.storyappfinal.databinding.ActivityMapsBinding
+import com.aryanto.storyappfinal.utils.ClientState
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,6 +26,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
 
     private val mapVM: MapVM by viewModel<MapVM>()
+    private val boundsBuilder = LatLngBounds.builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +51,50 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isMapToolbarEnabled = true
         mMap.uiSettings.isIndoorLevelPickerEnabled = true
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        setView()
 
+    }
+
+    private fun setView() {
+        binding.apply {
+            mapVM.map.observe(this@MapsActivity) { resources ->
+                when (resources) {
+                    is ClientState.SUCCESS -> {
+                        pBarMap.visibility = View.GONE
+                        resources.data?.forEach { handleSuccess(it) }
+
+                    }
+
+                    is ClientState.ERROR -> {
+                        pBarMap.visibility = View.GONE
+                        showToast("${resources.message}")
+                    }
+
+                    is ClientState.LOADING -> {
+                        pBarMap.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            mapVM.mapStory()
+        }
+    }
+
+    private fun handleSuccess(story: Story) {
+
+        val location = LatLng(story.lat, story.lon)
+        mMap.addMarker(
+            MarkerOptions()
+                .position(location)
+                .title(story.name)
+                .snippet(story.description)
+        )
+
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLng(
+                location
+            )
+        )
 
     }
 
