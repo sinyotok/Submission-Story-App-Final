@@ -14,6 +14,7 @@ import com.aryanto.storyappfinal.R
 import com.aryanto.storyappfinal.core.data.network.ApiClient
 import com.aryanto.storyappfinal.databinding.ActivityHomeBinding
 import com.aryanto.storyappfinal.ui.activity.auth.login.LoginActivity
+import com.aryanto.storyappfinal.ui.activity.map.MapsActivity
 import com.aryanto.storyappfinal.ui.activity.upload.UploadActivity
 import com.aryanto.storyappfinal.utils.StateAdapter
 import com.aryanto.storyappfinal.utils.TokenManager
@@ -80,7 +81,7 @@ class HomeActivity : AppCompatActivity() {
             }
 
             R.id.action_map -> {
-                val intent = Intent(this, UploadActivity::class.java)
+                val intent = Intent(this, MapsActivity::class.java)
                 startActivity(intent)
 
                 true

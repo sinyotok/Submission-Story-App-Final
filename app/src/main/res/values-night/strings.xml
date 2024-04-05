@@ -37,5 +37,9 @@
     <string name="time_out">Time out</string>
     <string name="retry">Retry</string>
     <string name="maps">Maps</string>
+    <string name="normal">Normal</string>
+    <string name="satellite">Satellite</string>
+    <string name="terrain">Terrain</string>
+    <string name="hybrid">Hybrid</string>
 
 </resources>
