@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
 }
 
 android {
@@ -67,6 +68,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+    implementation(libs.play.services.maps)
     ksp(libs.compiler)
 
     //paging 3

@@ -9,6 +9,7 @@ import com.aryanto.storyappfinal.core.data.PagingSource
 import com.aryanto.storyappfinal.core.data.model.Story
 import com.aryanto.storyappfinal.core.data.network.ApiService
 import com.aryanto.storyappfinal.core.data.response.DetailResponse
+import com.aryanto.storyappfinal.core.data.response.StoryResponse
 
 class AppRepository(
     private val apiService: ApiService
@@ -16,6 +17,10 @@ class AppRepository(
 
     suspend fun detail(id: String): DetailResponse {
         return apiService.getDetail(id)
+    }
+
+    suspend fun getLocation(): StoryResponse{
+        return apiService.getStoriesLocation()
     }
 
     fun getStory(): LiveData<PagingData<Story>> {

@@ -36,5 +36,6 @@
     <string name="logo_image_preview_upload">Logo image preview upload</string>
     <string name="time_out">Time out</string>
     <string name="retry">Retry</string>
+    <string name="maps">Maps</string>
 
 </resources>

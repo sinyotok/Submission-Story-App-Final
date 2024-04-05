@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/action_map"
+        android:title="@string/maps"
+        android:icon="@drawable/map_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_logout"
         android:title="@string/keluar"
         android:icon="@drawable/exit_24"

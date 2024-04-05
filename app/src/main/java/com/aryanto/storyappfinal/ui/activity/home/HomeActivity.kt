@@ -79,6 +79,13 @@ class HomeActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.action_map -> {
+                val intent = Intent(this, UploadActivity::class.java)
+                startActivity(intent)
+
+                true
+            }
+
             R.id.action_logout -> {
                 lifecycleScope.launch {
                     val tokenManager = TokenManager.getInstance(this@HomeActivity)
