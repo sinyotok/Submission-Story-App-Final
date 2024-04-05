@@ -1,10 +1,12 @@
 package com.aryanto.storyappfinal.ui.activity.detail
 
+import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -12,6 +14,7 @@ import com.aryanto.storyappfinal.R
 import com.aryanto.storyappfinal.core.data.model.Story
 import com.aryanto.storyappfinal.databinding.ActivityDetailBinding
 import com.aryanto.storyappfinal.utils.ClientState
+import com.aryanto.storyappfinal.utils.DateTimeUtils
 import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -21,6 +24,7 @@ class DetailActivity : AppCompatActivity() {
 
     private val detailVM: DetailVM by viewModel<DetailVM>()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -46,6 +50,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setView() {
         binding.apply {
             detailVM.detail.observe(this@DetailActivity) { resources ->
@@ -68,10 +73,11 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleDetail(detailView: Story) {
         binding.apply {
             detailName.text = detailView.name
-            detailCreatedAt.text = detailView.createdAt
+            detailCreatedAt.text = DateTimeUtils.formatCreatedAd(detailView.createdAt)
             detailDescription.text = detailView.description
 
             Glide.with(this@DetailActivity)

@@ -2,8 +2,10 @@ package com.aryanto.storyappfinal.ui.activity.home
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.paging.PagingDataAdapter
@@ -12,15 +14,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aryanto.storyappfinal.core.data.model.Story
 import com.aryanto.storyappfinal.databinding.ItemBinding
 import com.aryanto.storyappfinal.ui.activity.detail.DetailActivity
+import com.aryanto.storyappfinal.utils.DateTimeUtils
 import com.bumptech.glide.Glide
 
 class PagingAdapter : PagingDataAdapter<Story, PagingAdapter.HomeViewHolder>(myDiffCB) {
-    class HomeViewHolder(private val binding: ItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: Story){
+    class HomeViewHolder(private val binding: ItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun bind(user: Story) {
             binding.apply {
                 nameItem.text = user.name
                 descriptionItem.text = user.description
-                createdAt.text = user.createdAt
+                createdAt.text = DateTimeUtils.formatCreatedAd(user.createdAt)
 
                 Glide.with(root)
                     .load(user.photoUrl)
@@ -47,6 +51,7 @@ class PagingAdapter : PagingDataAdapter<Story, PagingAdapter.HomeViewHolder>(myD
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
         getItem(position).let {
             if (it != null) {
