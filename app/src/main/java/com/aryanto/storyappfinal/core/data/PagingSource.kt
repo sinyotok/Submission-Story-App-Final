@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.aryanto.storyappfinal.core.data.model.Story
 import com.aryanto.storyappfinal.core.data.network.ApiService
+import java.io.IOException
 
 class PagingSource(
     private val apiService: ApiService
@@ -27,6 +28,8 @@ class PagingSource(
                 nextKey = if (data.isEmpty()) null else page +1
             )
 
+        } catch (ioe: IOException) {
+            return LoadResult.Error(ioe)
         } catch (e: Exception) {
             return LoadResult.Error(e)
         }
