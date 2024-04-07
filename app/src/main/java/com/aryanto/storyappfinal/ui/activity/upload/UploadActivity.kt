@@ -5,10 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
@@ -16,9 +16,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.aryanto.storyappfinal.R
 import com.aryanto.storyappfinal.databinding.ActivityUploadBinding
 import com.aryanto.storyappfinal.ui.activity.home.HomeActivity
@@ -27,6 +27,7 @@ import com.aryanto.storyappfinal.utils.compressImage
 import com.aryanto.storyappfinal.utils.getImageUri
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -34,13 +35,13 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class UploadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUploadBinding
-    private lateinit var fusedLocationProvider: FusedLocationProviderClient
+    private lateinit var fusedLP: FusedLocationProviderClient
     private lateinit var checkBox: CheckBox
-    private var lat: Double? = null
-    private var lon: Double? = null
 
     private val uploadVM: UploadVM by viewModel<UploadVM>()
 
@@ -57,7 +58,7 @@ class UploadActivity : AppCompatActivity() {
             insets
         }
 
-        fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
+        fusedLP = LocationServices.getFusedLocationProviderClient(this)
         checkBox = binding.enableLocationCheckBox
 
         setView()
@@ -68,40 +69,13 @@ class UploadActivity : AppCompatActivity() {
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                getMyLocation()
+                lifecycleScope.launch {
+                    getMyLocation()
+                }
             }
         }
 
         btnUpload()
-
-    }
-
-    private fun getMyLocation() {
-
-        if (ContextCompat.checkSelfPermission(
-                this.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                this.applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            binding.enableLocationCheckBox.isChecked = false
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                ),
-                100
-            )
-
-        } else {
-            val location = fusedLocationProvider.lastLocation
-            location.addOnSuccessListener {
-                binding.enableLocationCheckBox.isChecked = true
-                lat = it.latitude
-                lon = it.longitude
-            }
-        }
 
     }
 
@@ -192,6 +166,31 @@ class UploadActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun getMyLocation(): Location? = suspendCoroutine {
+
+        if (ActivityCompat.checkSelfPermission(
+                this.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                this.applicationContext,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100
+            )
+            it.resume(null)
+
+        } else {
+            val location = fusedLP.lastLocation
+            location.addOnSuccessListener { result ->
+                it.resume(result)
+            }
+        }
+
+    }
+
     private fun btnUpload() {
         binding.apply {
             buttonUpload.setOnClickListener {
@@ -199,25 +198,48 @@ class UploadActivity : AppCompatActivity() {
                 val desc = descriptionForm.getDesc()
 
                 if (fileImage != null) {
+                    if (checkBox.isChecked) {
+                        lifecycleScope.launch {
+                            checkBox.isChecked = true
+                            val location = getMyLocation()
+                            val file = compressImage(this@UploadActivity, fileImage)
 
-                    val file = compressImage(this@UploadActivity, fileImage)
+                            val photoRB =
+                                file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                            val descPart = desc.toRequestBody("text/plain".toMediaTypeOrNull())
 
-                    val photoRB = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                    val descPart = desc.toRequestBody("text/plain".toMediaTypeOrNull())
+                            val filePart = photoRB.let {
+                                MultipartBody.Part.createFormData(
+                                    "photo",
+                                    file.name,
+                                    it
+                                )
+                            }
 
-                    val filePart = photoRB.let {
-                        MultipartBody.Part.createFormData(
-                            "photo",
-                            file.name,
-                            it
-                        )
-                    }
-                    if (lat != null && lon != null) {
-                        uploadVM.uploadStory(filePart, descPart, lat!!, lon!!)
+                            val lat = location?.latitude ?: 0.0
+                            val lon = location?.longitude ?: 0.0
+                            uploadVM.uploadStory(filePart, descPart, lat, lon)
+                        }
+
                     } else {
-                        uploadVM.uploadStory(filePart, descPart, lat = 0.0, lon = 0.0)
-                    }
+                        checkBox.isChecked = false
+                        val file = compressImage(this@UploadActivity, fileImage)
 
+                        val photoRB = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                        val descPart = desc.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                        val filePart = photoRB.let {
+                            MultipartBody.Part.createFormData(
+                                "photo",
+                                file.name,
+                                it
+                            )
+                        }
+
+                        val lat = 0.0
+                        val lon = 0.0
+                        uploadVM.uploadStory(filePart, descPart, lat, lon)
+                    }
                 } else {
                     showToast("Please take a picture")
                 }
