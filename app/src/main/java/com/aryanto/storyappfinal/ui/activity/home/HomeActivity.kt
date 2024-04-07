@@ -41,8 +41,6 @@ class HomeActivity : AppCompatActivity() {
 
         setAdapter()
 
-        setView()
-
     }
 
     private fun setAdapter() {
@@ -52,15 +50,13 @@ class HomeActivity : AppCompatActivity() {
             homeListItem.adapter = pagingAdapter.withLoadStateFooter(
                 footer = StateAdapter { pagingAdapter.retry() }
             )
-        }
-    }
 
-    private fun setView() {
-        homeVM.story.observe(this) {
-            lifecycleScope.launch {
-                val tManager = TokenManager.getInstance(this@HomeActivity).getToken() ?: ""
-                ApiClient.setAuthToken(tManager)
-                pagingAdapter.submitData(lifecycle, it)
+            homeVM.story.observe(this@HomeActivity) {
+                lifecycleScope.launch {
+                    val tManager = TokenManager.getInstance(this@HomeActivity).getToken() ?: ""
+                    ApiClient.setAuthToken(tManager)
+                    pagingAdapter.submitData(lifecycle, it)
+                }
             }
         }
     }
