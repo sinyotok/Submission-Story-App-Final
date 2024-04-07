@@ -1,12 +1,10 @@
 package com.aryanto.storyappfinal.ui.activity.upload
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aryanto.storyappfinal.core.data.network.ApiService
 import com.aryanto.storyappfinal.core.data.response.AddStoryResponse
 import com.aryanto.storyappfinal.core.repo.AppRepository
 import com.aryanto.storyappfinal.utils.ClientState
@@ -42,7 +40,6 @@ class UploadVM(
         viewModelScope.launch {
             try {
                 _addStory.postValue(ClientState.LOADING())
-                Log.d("SAF-UVM", "Uploading story with lat: $lat, lon: $lon")
                 val response = appRepo.upload(img, desc, lat, lon)
 
                 if (response.error) {
