@@ -15,13 +15,21 @@
     <string name="register">Register</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
+    <string name="time_out">Time out</string>
+    <string name="retry">Retry</string>
+    <string name="maps">Maps</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="normal">Normal</string>
+    <string name="satellite">Satellite</string>
+    <string name="terrain">Terrain</string>
+    <string name="hybrid">Hybrid</string>
 
 
     <string name="masuk">Masuk</string>
     <string name="keluar">Keluar</string>
     <string name="daftar">Daftar</string>
 
-
+    <string name="post_dengan_lokasi">Post dengan lokasi</string>
     <string name="belum_punya_akun">Belum punya akun?</string>
     <string name="sudah_punya_akun">Sudah punya akun?</string>
     <string name="masukan_dulu_datamu_ya">Masukan dulu datamu ya</string>
@@ -34,12 +42,5 @@
     <string name="logo_image_item">Logo image item</string>
     <string name="logo_image_detail">Logo image detail</string>
     <string name="logo_image_preview_upload">Logo image preview upload</string>
-    <string name="time_out">Time out</string>
-    <string name="retry">Retry</string>
-    <string name="maps">Maps</string>
-    <string name="normal">Normal</string>
-    <string name="satellite">Satellite</string>
-    <string name="terrain">Terrain</string>
-    <string name="hybrid">Hybrid</string>
 
 </resources>

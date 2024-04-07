@@ -8,8 +8,11 @@ import androidx.paging.liveData
 import com.aryanto.storyappfinal.core.data.PagingSource
 import com.aryanto.storyappfinal.core.data.model.Story
 import com.aryanto.storyappfinal.core.data.network.ApiService
+import com.aryanto.storyappfinal.core.data.response.AddStoryResponse
 import com.aryanto.storyappfinal.core.data.response.DetailResponse
 import com.aryanto.storyappfinal.core.data.response.StoryResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class AppRepository(
     private val apiService: ApiService
@@ -21,6 +24,15 @@ class AppRepository(
 
     suspend fun getLocation(): StoryResponse{
         return apiService.getStoriesLocation()
+    }
+
+    suspend fun upload(
+        img: MultipartBody.Part,
+        desc: RequestBody,
+        lat: Double,
+        lon: Double
+    ): AddStoryResponse{
+        return apiService.uploadStory(img, desc, lat, lon)
     }
 
     fun getStory(): LiveData<PagingData<Story>> {

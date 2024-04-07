@@ -68,8 +68,11 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
-    implementation(libs.play.services.maps)
     ksp(libs.compiler)
+
+    // Map, location
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     //paging 3
     implementation(libs.androidx.paging.runtime.ktx)

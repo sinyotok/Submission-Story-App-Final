@@ -1,12 +1,14 @@
 package com.aryanto.storyappfinal.ui.activity.upload
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aryanto.storyappfinal.core.data.network.ApiService
 import com.aryanto.storyappfinal.core.data.response.AddStoryResponse
+import com.aryanto.storyappfinal.core.repo.AppRepository
 import com.aryanto.storyappfinal.utils.ClientState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -16,7 +18,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class UploadVM(
-    private val apiService: ApiService
+    private val appRepo: AppRepository
 ): ViewModel() {
     private val _addStory = MutableLiveData<ClientState<AddStoryResponse>>()
     val addStory: LiveData<ClientState<AddStoryResponse>> = _addStory
@@ -32,15 +34,16 @@ class UploadVM(
     }
 
     fun uploadStory(
-        photoPart: MultipartBody.Part,
-        descPart: RequestBody,
-//        latPart: Double,
-//        lonPart: Double
+        img: MultipartBody.Part,
+        desc: RequestBody,
+        lat: Double,
+        lon: Double
     ) {
         viewModelScope.launch {
             try {
                 _addStory.postValue(ClientState.LOADING())
-                val response = apiService.uploadStory(photoPart, descPart)
+                Log.d("SAF-UVM", "Uploading story with lat: $lat, lon: $lon")
+                val response = appRepo.upload(img, desc, lat, lon)
 
                 if (response.error) {
                     _addStory.postValue(ClientState.ERROR(response.message))
