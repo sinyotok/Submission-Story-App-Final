@@ -45,6 +45,11 @@ android {
         viewBinding = true
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
+    }
+
 }
 
 dependencies {
@@ -82,6 +87,15 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+
+
+
+    // Espresso
+    implementation(libs.androidx.espresso.idling.resource) // Just for test
+
+    androidTestImplementation(libs.androidx.espresso.intents)//IntentsTestRule
+    androidTestImplementation(libs.androidx.espresso.contrib)
+    androidTestImplementation(libs.androidx.espresso.idling.resource)
 
 
     implementation(libs.androidx.core.ktx)
