@@ -11,6 +11,9 @@
       <entry key="emptyPasswordAndEmailLogin()">
         <State />
       </entry>
+      <entry key="invalidPasswordAndEmailLogin()">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
