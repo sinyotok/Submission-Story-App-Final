@@ -7,6 +7,7 @@ import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -58,7 +59,7 @@ class LoginActivityTest {
     @Test
     fun emptyPasswordAndEmailLogin() {
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -67,12 +68,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(emptyInput))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -81,7 +82,7 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(validEmail))
         Espresso.closeSoftKeyboard()
 
@@ -91,12 +92,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(emptyInput))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
     }
@@ -104,7 +105,7 @@ class LoginActivityTest {
     @Test
     fun invalidPasswordAndEmailLogin() {
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -113,12 +114,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(invalidEmail))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -127,7 +128,7 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), clearText())
         Espresso.closeSoftKeyboard()
 
@@ -137,12 +138,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(validEmail))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -151,12 +152,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(invalidPass))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
     }
@@ -164,7 +165,7 @@ class LoginActivityTest {
     @Test
     fun wrongPasswordAndEmailLogin() {
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -173,12 +174,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(wrongEmail))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -187,12 +188,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(wrongPass))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
     }
@@ -200,7 +201,7 @@ class LoginActivityTest {
     @Test
     fun successPasswordAndEmailLogin() {
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -209,12 +210,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(validEmail))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         onView(
@@ -223,12 +224,12 @@ class LoginActivityTest {
                 withClassName(endsWith("EditText"))
             )
         )
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click(), typeText(validPass))
         Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.btn_submit_login))
-            .check(ViewAssertions.matches(isDisplayed()))
+            .check(matches(isDisplayed()))
             .perform(click())
 
     }

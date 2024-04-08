@@ -5,13 +5,19 @@
       <entry key="LoginActivityTest">
         <State />
       </entry>
+      <entry key="RegisterActivityTest">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="emptyPasswordAndEmailLogin()">
+      <entry key="emptyNameEmailPassRegister()">
         <State />
       </entry>
-      <entry key="invalidPasswordAndEmailLogin()">
+      <entry key="wrongNameEmailPassRegister()">
+        <State />
+      </entry>
+      <entry key="wrongPasswordAndEmailLogin()">
         <State />
       </entry>
     </value>
