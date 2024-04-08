@@ -38,6 +38,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs  += ("-opt-in=kotlin.RequiresOptIn")
     }
 
     buildFeatures{
@@ -96,6 +97,13 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.intents)//IntentsTestRule
     androidTestImplementation(libs.androidx.espresso.contrib)
     androidTestImplementation(libs.androidx.espresso.idling.resource)
+
+    //Mockito
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+
+    testImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
+    testImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
 
 
     implementation(libs.androidx.core.ktx)
